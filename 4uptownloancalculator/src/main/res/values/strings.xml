@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">KeyLoan - Loan Calculator</string>
+    <string name="title_activity_main">KeyLoan - Loan Calculator</string>
+    <string name="title_activity_display_calculation">Amortized Results</string>
+
+    <string name="lblLoanAmount">Loan Amount</string>
+    <string name="txtLoanAmount">Enter Loan Amount</string>
+    <string name="lblInterestRate">Interest Rate</string>
+    <string name="txtInterestRate">Enter Interest Rate</string>
+    <string name="lblNumberOfPayments">Term # of Months</string>
+    <string name="txtNumberOfPayments">Enter # of Months</string>
+    <string name="cmd_calculate">Calculate</string>
+
+    <string name="lblMonthlyPayment">Monthly Payment</string>
+    <string name="lblTotalPrinciple">Total Principle Paid</string>
+    <string name="lblTotalInterest">Total Interest Paid</string>
+    <string name="lblTotalPaid">Total Paid</string>
+    <string name="lblCompoundedInterest">Compounded Interest</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="lblResult">Result</string>
+    <string name="wvResult">Result</string>
+
+</resources>
