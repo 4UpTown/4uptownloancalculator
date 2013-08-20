@@ -66,8 +66,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_below="@+id/txtInterestRate"
-            />
+            android:layout_below="@+id/txtLoanAmount"
+            android:layout_toRightOf="@+id/txtInterestRate"/>
 
     <EditText
             android:id="@+id/txtNumberOfPayments"
@@ -77,11 +77,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_below="@+id/lblNumberOfPayments"
-
             android:text="48"
+            android:layout_alignTop="@+id/txtInterestRate"
+            android:layout_toRightOf="@+id/txtInterestRate"
+            android:layout_alignBottom="@+id/txtInterestRate"/>
+
+
+
+
+
+
+    <TextView
+            android:id="@+id/lblCustomPayment"
+            android:text="@string/lblCustomPayment"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_below="@+id/txtNumberOfPayments"
             />
 
+    <EditText
+            android:id="@+id/txtCustomPayment"
+            android:inputType="numberDecimal"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="350.35"
+
+            android:layout_below="@+id/lblCustomPayment"
+
+            />
 
 
 
@@ -95,55 +122,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_below="@+id/txtNumberOfPayments"
-            />
+            android:layout_alignBottom="@+id/txtCustomPayment"
+            android:layout_toRightOf="@+id/lblLoanAmount"/>
+
+    <Button
+            android:id="@+id/cmd_amortize"
+            android:text="@string/cmd_amortize"
+            android:onClick="clickAmortize"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignTop="@+id/cmd_calculate"
+            android:layout_toRightOf="@+id/cmd_calculate"/>
 
 
-    <TextView
-            android:id="@+id/lblMonthlyPayment"
-            android:text="@string/lblMonthlyPayment"
 
+    <WebView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/wvResult1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
             android:layout_below="@+id/cmd_calculate"
             />
-    <TextView
-            android:id="@+id/lblTotalPrinciple"
-            android:text="@string/lblTotalPrinciple"
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_below="@+id/lblMonthlyPayment"
-            />
-    <TextView
-            android:id="@+id/lblTotalInterest"
-            android:text="@string/lblTotalInterest"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_below="@+id/lblTotalPrinciple"
-            />
-    <TextView
-            android:id="@+id/lblTotalPaid"
-            android:text="@string/lblTotalPaid"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_below="@+id/lblTotalInterest"
-            />
-    <TextView
-            android:id="@+id/lblCompoundedInterest"
-            android:text="@string/lblCompoundedInterest"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_below="@+id/lblTotalPaid"
-            />
 
 
 </RelativeLayout>

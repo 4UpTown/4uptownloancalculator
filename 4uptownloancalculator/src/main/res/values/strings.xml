@@ -7,11 +7,19 @@
 
     <string name="lblLoanAmount">Loan Amount</string>
     <string name="txtLoanAmount">Enter Loan Amount</string>
+
     <string name="lblInterestRate">Interest Rate</string>
     <string name="txtInterestRate">Enter Interest Rate</string>
+
     <string name="lblNumberOfPayments">Term # of Months</string>
     <string name="txtNumberOfPayments">Enter # of Months</string>
+
+    <string name="lblCustomPayment">Amount You Plan to Pay Per Month</string>
+    <string name="txtCustomPayment">0</string>
+
+
     <string name="cmd_calculate">Calculate</string>
+    <string name="cmd_amortize">Amortize</string>
 
     <string name="lblMonthlyPayment">Monthly Payment</string>
     <string name="lblTotalPrinciple">Total Principle Paid</string>

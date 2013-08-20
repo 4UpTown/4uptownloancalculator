@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.webkit.WebView;
@@ -14,11 +15,13 @@ public class DisplayCalculationActivity extends Activity {
     private WebView mWebView;
     public StringBuilder mMathString;
     //private ButtonClickListener mClickListener;
+    private final String TAG = "DisplayCalculationActivity" ;
 
 
     @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate(Bundle savedInstanceState)") ;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_calculation);
 
@@ -120,6 +123,7 @@ public class DisplayCalculationActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(TAG, "onOptionsItemSelected(MenuItem item)") ;
         switch (item.getItemId()) {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
@@ -135,6 +139,7 @@ public class DisplayCalculationActivity extends Activity {
 
 
     public void updateWebView() {
+        Log.i(TAG, "updateWebView()") ;
 
         StringBuilder builder = new StringBuilder();
 

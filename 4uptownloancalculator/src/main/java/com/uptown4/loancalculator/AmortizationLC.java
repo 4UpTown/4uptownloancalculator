@@ -8,7 +8,7 @@ import java.text.DecimalFormat;
  * Created by ~Q~ on 8/8/13.
  */
 public class AmortizationLC {
-    private final String TAG = "AmortizationLC.java" ;
+    private final String TAG = "AmortizationLC" ;
 
 // properties - start
     // Principle
@@ -30,7 +30,7 @@ public class AmortizationLC {
 
 
 
-    public void setPrinciple(double val) {
+        public void setPrinciple(double val) {
             pPrinciple = val ;
         }
             public double getPrinciple() {
@@ -51,6 +51,13 @@ public class AmortizationLC {
                 return pNumberOfPayments ;
             }
 
+        public void setMonthlyPayment(double val) {
+            pMonthlyPayment = val ;
+        }
+            public double getMonthlyPayment() {
+                return pMonthlyPayment;
+            }
+
     public double getTotalPrinciple() {
         return pTotalPrinciple ;
     }
@@ -59,9 +66,6 @@ public class AmortizationLC {
     }
     public double getTotalPaid() {
         return pTotalPaid ;
-    }
-    public double getMonthlyPayment() {
-        return pMonthlyPayment;
     }
     public double getCompoundedInterest() {
         return pCompoundedInterest;
@@ -85,8 +89,8 @@ public class AmortizationLC {
 
 
 
-    public String calAmortize(double vPrinciple,double vInterestRate, int vNumberOfMonths){
-        Log.i(TAG, "calAmortize") ;
+    public String calSimplyCalculate(double vPrinciple,double vInterestRate, int vNumberOfMonths , double vCustomPayment ){
+        Log.i(TAG, "calSimplyCalculate(double vPrinciple,double vInterestRate, int vNumberOfMonths , double vCustomPayment )") ;
 
         // added - start
             String sOut ;
@@ -121,24 +125,38 @@ public class AmortizationLC {
         int i;
 
         sOut = "" ;
+        vMonthlyPayment=0;
+        vInterestPaid=0;
+        vPrinciplePaid=0;
 
-        vMonthlyPayment=vPrinciple*vInterestRatePerMonth*Math.pow(1+vInterestRatePerMonth,(double)vNumberOfMonths)/(Math.pow(1+vInterestRatePerMonth,(double)vNumberOfMonths)-1);
-        pMonthlyPayment=vMonthlyPayment;
+        if (vCustomPayment <= 0)
+        {
+            //vMonthlyPayment=vPrinciple*vInterestRatePerMonth*Math.pow(1+vInterestRatePerMonth,(double)vNumberOfMonths)/(Math.pow(1+vInterestRatePerMonth,(double)vNumberOfMonths)-1);
+            pMonthlyPayment=vPrinciple*vInterestRatePerMonth*Math.pow(1+vInterestRatePerMonth,(double)vNumberOfMonths)/(Math.pow(1+vInterestRatePerMonth,(double)vNumberOfMonths)-1);
+            //pMonthlyPayment=vMonthlyPayment;
+        }else {
+            pMonthlyPayment = vCustomPayment ;
+        }
 
-        sOut = sOut + "<table>";
 
+        //sOut = sOut + "<table>";
 
-        sOut = sOut + "<table border='1' > "+ printHeader();
+        vNewPrinciple = vPrinciple ;
+
         //print amortization schedule for all months except the last month
         for(i=1;i<vNumberOfMonths;i++){
-
+            if (pMonthlyPayment < vNewPrinciple)
+            {
             vInterestPaid=vPrinciple*vInterestRatePerMonth;//interest paid
-            vPrinciplePaid=vMonthlyPayment-vInterestPaid; //principal paid
+            //vPrinciplePaid=vMonthlyPayment-vInterestPaid; //principal paid
+            vPrinciplePaid=pMonthlyPayment-vInterestPaid; //principal paid
             vNewPrinciple=vPrinciple-vPrinciplePaid; //new balance
+
 
             pTotalPrinciple = pTotalPrinciple  + vPrinciplePaid ;
             pTotalInterest = pTotalInterest + vInterestPaid ;
-            pTotalPaid = pTotalPaid + vMonthlyPayment ;
+            pTotalPaid = pTotalPaid + pMonthlyPayment ;
+
 
 // convert the values to ##.00 format - start
             dv = df.format(vPrinciple) ;
@@ -161,9 +179,12 @@ public class AmortizationLC {
                 pTotalPaid = Double.parseDouble(dv);
 // convert the values to ##.00 format -end
 
-            sOut = sOut + printSch(i,vPrinciple,vMonthlyPayment,vInterestPaid,vPrinciplePaid,vNewPrinciple);
             vPrinciple=vNewPrinciple;  //update old balance
+                }else{
+                    i=vNumberOfMonths;
+                }
             }
+
         //last month
         vPrinciplePaid=vPrinciple;
         vInterestPaid=vPrinciple*vInterestRatePerMonth;
@@ -196,14 +217,166 @@ public class AmortizationLC {
 // convert the values to ##.00 format -end
 
 
-        sOut = sOut + printSch(i,vPrinciple,vMonthlyPayment,vInterestPaid,vPrinciplePaid,vNewPrinciple);
-
-        sOut = sOut + printTotals() ;
-
-        sOut = sOut + "</table>";
-
+            //sOut = sOut + printTotals() ;
+              //  sOut = sOut + "</table>";
         return sOut ;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+    public String calAmortize(double vPrinciple,double vInterestRate, int vNumberOfMonths , double vCustomPayment ){
+        Log.i(TAG, "calAmortize") ;
+
+        // added - start
+        String sOut ;
+            sOut = "" ;
+        DecimalFormat df = new DecimalFormat("#.##") ;
+        String dv ;
+            dv = "";
+        // added - end
+
+        double vNewPrinciple = 0;
+        double vInterestRatePerMonth=(pCompoundedInterest/12)/100;
+        double vMonthlyPayment=0;
+        double vInterestPaid=0;
+        double vPrinciplePaid=0;
+        int i=0;
+
+        pTotalPrinciple = 0 ;
+        pTotalInterest = 0 ;
+        pTotalPaid = 0 ;
+        pMonthlyPayment = 0;
+
+
+/*
+        r = (1 + i/n)^n - 1.
+
+        In this formula,
+        r represents the effective interest rate,
+        i represents the stated interest rate,
+        and n represents the number of compounding periods per year.
+*/
+
+        // calculate the interest & compound interest--- start
+            pCompoundedInterest = Math.pow(  (1 + (vInterestRate/100)/vNumberOfMonths) , vNumberOfMonths) - 1 ;
+            pCompoundedInterest = pCompoundedInterest * 100 ;
+
+            dv = df.format(pCompoundedInterest) ;
+            pCompoundedInterest = Double.parseDouble(dv);
+        // calculate the interest & compound interest--- end
+
+
+
+        //r = (1 + .05/12)^12 - 1, or r = 5.12 percent.
+        //int vNumberOfMonths=vNumberOfMonths;
+
+        //double vInterestRatePerMonth=(vInterestRate/12)/100;
+
+
+        if (vCustomPayment > 0)
+        {
+            pMonthlyPayment = vCustomPayment ;
+        }else {
+            //vMonthlyPayment=vPrinciple*vInterestRatePerMonth*Math.pow(1+vInterestRatePerMonth,(double)vNumberOfMonths)/(Math.pow(1+vInterestRatePerMonth,(double)vNumberOfMonths)-1);
+            pMonthlyPayment=vPrinciple*vInterestRatePerMonth*Math.pow(1+vInterestRatePerMonth,(double)vNumberOfMonths)/(Math.pow(1+vInterestRatePerMonth,(double)vNumberOfMonths)-1);
+            //pMonthlyPayment=vMonthlyPayment;
+        }
+
+
+        sOut = sOut + "<table>";
+        sOut = sOut + "<table border='1' > "+ printHeader();
+
+        //print amortization schedule for all months except the last month
+        for(i=1;i<vNumberOfMonths;i++)
+        {
+            if (pMonthlyPayment < vNewPrinciple)
+            {
+            vInterestPaid=vPrinciple*vInterestRatePerMonth;//interest paid
+            //vPrinciplePaid=vMonthlyPayment-vInterestPaid; //principal paid
+            vPrinciplePaid=pMonthlyPayment-vInterestPaid; //principal paid
+            vNewPrinciple=vPrinciple-vPrinciplePaid; //new balance
+
+            pTotalPrinciple = pTotalPrinciple  + vPrinciplePaid ;
+            pTotalInterest = pTotalInterest + vInterestPaid ;
+            pTotalPaid = pTotalPaid + pMonthlyPayment ;
+
+
+// convert the values to ##.00 format - start
+            dv = df.format(vPrinciple) ;
+            vPrinciple = Double.parseDouble(dv);
+            dv = df.format(vMonthlyPayment) ;
+            vMonthlyPayment = Double.parseDouble(dv);
+            dv = df.format(vInterestPaid) ;
+            vInterestPaid = Double.parseDouble(dv);
+            dv = df.format(vPrinciplePaid) ;
+            vPrinciplePaid = Double.parseDouble(dv);
+            dv = df.format(vNewPrinciple) ;
+            vNewPrinciple = Double.parseDouble(dv);
+            dv = df.format(pMonthlyPayment) ;
+            pMonthlyPayment = Double.parseDouble(dv);
+            dv = df.format(pTotalPrinciple) ;
+            pTotalPrinciple = Double.parseDouble(dv);
+            dv = df.format(pTotalInterest) ;
+            pTotalInterest = Double.parseDouble(dv);
+            dv = df.format(pTotalPaid) ;
+            pTotalPaid = Double.parseDouble(dv);
+// convert the values to ##.00 format -end
+
+            sOut = sOut + printSch(i,vPrinciple,pMonthlyPayment,vInterestPaid,vPrinciplePaid,vNewPrinciple);
+            vPrinciple=vNewPrinciple;  //update old balance
+                }else{
+                    i=vNumberOfMonths;
+                }
+        }
+
+
+        //last month
+        vPrinciplePaid=vPrinciple;
+        vInterestPaid=vPrinciple*vInterestRatePerMonth;
+        vMonthlyPayment=vPrinciplePaid+vInterestPaid;
+        vNewPrinciple=0.0;
+
+        pTotalPrinciple = pTotalPrinciple + vPrinciplePaid ;
+        pTotalInterest = pTotalInterest + vInterestPaid ;
+        pTotalPaid = pTotalPaid + vMonthlyPayment ;
+
+// convert the values to ##.00 format - start
+        dv = df.format(vPrinciple) ;
+        vPrinciple = Double.parseDouble(dv);
+        dv = df.format(vMonthlyPayment) ;
+        vMonthlyPayment = Double.parseDouble(dv);
+        dv = df.format(vInterestPaid) ;
+        vInterestPaid = Double.parseDouble(dv);
+        dv = df.format(vPrinciplePaid) ;
+        vPrinciplePaid = Double.parseDouble(dv);
+        dv = df.format(vNewPrinciple) ;
+        vNewPrinciple = Double.parseDouble(dv);
+        dv = df.format(pMonthlyPayment) ;
+        pMonthlyPayment = Double.parseDouble(dv);
+        dv = df.format(pTotalPrinciple) ;
+        pTotalPrinciple = Double.parseDouble(dv);
+        dv = df.format(pTotalInterest) ;
+        pTotalInterest = Double.parseDouble(dv);
+        dv = df.format(pTotalPaid) ;
+        pTotalPaid = Double.parseDouble(dv);
+// convert the values to ##.00 format -end
+
+
+        sOut = sOut + printSch(i,vPrinciple,vMonthlyPayment,vInterestPaid,vPrinciplePaid,vNewPrinciple);
+        sOut = sOut + printTotals() ;
+        sOut = sOut + "</table>";
+        return sOut ;
+    }
+
 
 
 
